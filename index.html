@@ -238,6 +238,14 @@ var render_gexf = (gexf) => {
   // remove the node that's connected to everything!
   graph.dropNode('core:init.default');
 
+  // remove all nodes starting with 'core'
+  for (let node of graph.nodes()) {
+    if (node.startsWith('core')) {
+      graph.dropNode(node);
+    }
+  }
+
+
   // remove the `mathlib` prefix
   for (let [node, node_data] of graph.nodeEntries()) {
     if (node_data.proj == 'mathlib') {
