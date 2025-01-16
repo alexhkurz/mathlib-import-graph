@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mathlib Graph Viewer 3</title>
+    <script src="vendor/sigma.min.js"></script>
+    <script src="vendor/graphology.min.js"></script>
+    <script src="vendor/graphology-library.min.js"></script>
+  
+      <style>
+        #graph-container {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="graph-container"></div>
+
+    <script>
+        // Function to load and parse GEXF file
+        async function loadGraph() {
+            try {
+                console.log("Starting to load graph...");
+                const response = await fetch('import.gexf');
+                console.log("Fetch response:", response);
+                const gexf = await response.text();
+                console.log("GEXF data length:", gexf.length);
+                
+                // Parse GEXF file
+                const graph = graphologyLibrary.gexf.parse(graphology.Graph, gexf);
+                console.log("Graph parsed, nodes:", graph.order, "edges:", graph.size);
+
+                // Initialize the sigma renderer
+                const container = document.getElementById("graph-container");
+                const renderer = new Sigma.Sigma(graph, container, {
+                    defaultEdgeColor: "#000000",
+                    defaultEdgeType: "arrow",
+                    edgeProgramClasses: {
+                        arrow: Sigma.EdgeArrowProgram
+                    },
+                    renderEdgeLabels: true,
+                    minArrowSize: 8,
+                    maxArrowSize: 12,
+                    initialCamera: {
+                        x: 0,
+                        y: 0,
+                        ratio: 2.5
+                    }
+                });
+
+                // Add hover interactions
+                renderer.on("enterNode", ({ node }) => {
+                    container.style.cursor = "pointer";
+                });
+
+                renderer.on("leaveNode", () => {
+                    container.style.cursor = "default";
+                });
+
+            } catch (error) {
+                console.error("Detailed error:", error);
+                alert("Error loading graph. Check console for details.");
+            }
+        }
+
+        // Load the graph when page loads
+        loadGraph();
+    </script>
+</body>
+</html> 

@@ -51,9 +51,9 @@
         // Initialize the sigma renderer
         const container = document.getElementById("graph-container");
         const renderer = new Sigma.Sigma(graph, container, {
-            defaultEdgeColor: "#000000",
-            defaultEdgeType: "arrow",
-            defaultEdgeSize: 30
+            defaultEdgeColor: "#000000", //black edges
+            defaultEdgeType: "arrow",  //arrow, line, ...
+            defaultEdgeSize: 3
         });
 
         // Add hover interactions
